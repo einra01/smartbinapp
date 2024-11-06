@@ -86,7 +86,8 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
-                alignment: Alignment.topCenter, // Align the image to the top center
+                alignment:
+                    Alignment.topCenter, // Align the image to the top center
                 child: Image.asset(
                   'assets/binlogo.png',
                   height: 300, // Adjust height as needed
@@ -120,10 +121,9 @@ class _LoginPageState extends State<LoginPage> {
                 decoration: const InputDecoration(
                   labelText: 'Email',
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(68)),
+                    borderRadius: BorderRadius.all(Radius.circular(68)),
                   ),
                 ),
-
                 keyboardType: TextInputType.emailAddress,
               ),
 
@@ -142,9 +142,11 @@ class _LoginPageState extends State<LoginPage> {
               ElevatedButton(
                 onPressed: _login,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green, // Sets the button's background color to green
+                  backgroundColor: Colors
+                      .green, // Sets the button's background color to green
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(68), // Adjust the radius as needed
+                    borderRadius: BorderRadius.circular(
+                        68), // Adjust the radius as needed
                   ),
                 ),
                 child: const Text('Login'),
@@ -154,7 +156,8 @@ class _LoginPageState extends State<LoginPage> {
               if (_displayedEmail != null)
                 Text(
                   'Email: $_displayedEmail',
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
                 ),
             ],
           ),
@@ -163,5 +166,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-
-
