@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1010142008650",
+    "project_id": "smartaccount-9ad1d",
+    "storage_bucket": "smartaccount-9ad1d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1010142008650:android:cb6b6fca170ea23b921db3",
+        "android_client_info": {
+          "package_name": "com.example.smartbin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAL7rSSCqrtIu3_-Iy1B9Gs5OrsRwCReUQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1010142008650:android:4dabaf300bc19433921db3",
+        "android_client_info": {
+          "package_name": "com.example.testbinaccount"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAL7rSSCqrtIu3_-Iy1B9Gs5OrsRwCReUQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
