@@ -1,3 +1,3 @@
 # smartbinapp
 
-Pa clone nalang ng new file
+PA CLONE NALANG NG NEW FILE
