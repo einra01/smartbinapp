@@ -501,7 +501,7 @@ class _AccountManagementPage1State extends State<AccountManagementPage1> {
                             ),
                             const SizedBox(height: 10),
                             SizedBox(
-                              width: 200, // Set width to 200
+                              width: 50, // Set width to 200
                               height: 50,  // Set height to 50
                               child: ElevatedButton(
                                 onPressed: _updateName,
