@@ -5,9 +5,15 @@ workflows:
       flutter: stable
       xcode: latest
     scripts:
+      - name: Update iOS Deployment Target
+        script: |
+          cd ios
+          sed -i '' "s/platform :ios, '12.0'/platform :ios, '13.0'/" Podfile
+          pod install --repo-update
       - name: Get Flutter dependencies
         script: flutter pub get
       - name: Build iOS app
         script: flutter build ipa --release
+
     artifacts:
       - build/ios/ipa/*.ipa
