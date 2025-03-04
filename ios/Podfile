@@ -1,8 +1,17 @@
+# Uncomment this line to define a global platform for your project
 platform :ios, '12.0'
 
+# CocoaPods analytics disabled
+ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+
+# Define the target
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
-  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__)) # This must be inside `target`
+
 end
+
+# Ensure Flutter is properly configured
+require File.expand_path(File.join('..', 'flutter', 'packages', 'flutter_tools', 'bin', 'podhelper'))
