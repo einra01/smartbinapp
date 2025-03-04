@@ -500,19 +500,15 @@ class _AccountManagementPage1State extends State<AccountManagementPage1> {
                               ),
                             ),
                             const SizedBox(height: 10),
-                            SizedBox(
-                              width: 50, // Set width to 200
-                              height: 50,  // Set height to 50
-                              child: ElevatedButton(
-                                onPressed: _updateName,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.yellow[700],
-                                ),
-                                child: const Text(
-                                  'Save',
-                                  style: TextStyle(fontSize: 18), // Increase text size for better visibility
-                                ),
+                            ElevatedButton(
+                              onPressed: _updateName,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.yellow[700],
+                                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16), // ✅ Adjusts button size
+                                textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold), // ✅ Bigger text
+                                minimumSize: const Size(75, 50), // ✅ Minimum width & height
                               ),
+                              child: const Text('Save'),
                             ),
 
                           ],
@@ -610,7 +606,7 @@ class _AccountManagementPage1State extends State<AccountManagementPage1> {
                                 _buildPasswordCriteria('Your password must be at least 8 characters long.', _isLengthValid),
                                 _buildPasswordCriteria('Your password must contain at least one uppercase letter (A-Z).', _hasUpperCase),
                                 _buildPasswordCriteria('Your password must contain at least one number (0-9).', _hasNumber),
-                                _buildPasswordCriteria('Your password must contain at least one special character (e.g., ! @ #  % ^ & *)', _hasSymbol),
+                                _buildPasswordCriteria('Your password must contain at least one special character (e.g., ! @ # % ^ & *)', _hasSymbol),
                               ],
                             ),
                             const SizedBox(height: 10),
@@ -620,20 +616,11 @@ class _AccountManagementPage1State extends State<AccountManagementPage1> {
                                   : null, // Disable button if conditions are not met or saving is in progress
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.yellow[700],
-                                disabledBackgroundColor: Colors.grey, // Grey when disabled
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)), // Keep rounded shape
-                                padding: const EdgeInsets.symmetric(vertical: 12), // Adjust padding for better UI
+                                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16), // ✅ Adjusts button size
+                                textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold), // ✅ Bigger text
+                                minimumSize: const Size(75, 50), // ✅ Minimum width & height
                               ),
-                              child: _isSaving
-                                  ? const SizedBox(
-                                width: 50,
-                                height: 50,
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                  strokeWidth: 2, // Small and rounded loader
-                                ),
-                              )
-                                  : const Text('Save'),
+                              child: const Text('Save'), // ✅ Moved inside the button correctly
                             ),
 
                           ],
@@ -776,6 +763,7 @@ class _AccountManagementPage1State extends State<AccountManagementPage1> {
   }
 }Widget _buildPasswordCriteria(String text, bool isValid) {
   return Row(
+    crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Icon(
         isValid ? Icons.check_circle : Icons.cancel,
@@ -783,10 +771,14 @@ class _AccountManagementPage1State extends State<AccountManagementPage1> {
         size: 18,
       ),
       const SizedBox(width: 5),
-      Text(
-        text,
-        style: TextStyle(color: isValid ? Colors.green : Colors.grey),
+      Flexible(
+        child: Text(
+          text,
+          style: TextStyle(color: isValid ? Colors.green : Colors.grey),
+          softWrap: true,
+        ),
       ),
+
     ],
   );
 }

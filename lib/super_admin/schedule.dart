@@ -24,14 +24,14 @@ class MyApp extends StatelessWidget {
       home: Schedule(),
     );
   }
-}class UserData {
+}
+class UserData {
   final String id;
   final String name;
   final String role;
   final String status;
   final String? profileImageUrl;
-  String deviceName;
-  String shift; // Ensure shift is non-nullable
+  String deviceName; // Added deviceName
 
   UserData({
     required this.id,
@@ -39,8 +39,7 @@ class MyApp extends StatelessWidget {
     required this.role,
     required this.status,
     this.profileImageUrl,
-    this.deviceName = "Unknown Device",
-    this.shift = "", // Default value to avoid null issues
+    this.deviceName = "Unknown Device", // Default to unknown
   });
 
   factory UserData.fromMap(String key, Map<dynamic, dynamic> value) {
@@ -50,13 +49,9 @@ class MyApp extends StatelessWidget {
       role: value['role']?.toString() ?? 'Unknown',
       status: value['status']?.toString() ?? 'Unknown',
       profileImageUrl: value['profileImageUrl']?.toString(),
-      shift: value['shift']?.toString() ?? "", // Ensure shift is never null
     );
   }
 }
-
-
-
 
 
 class Schedule extends StatefulWidget {
@@ -122,106 +117,28 @@ class _ScheduleState extends State<Schedule> {
 
           UserData user = UserData.fromMap(userId, userData);
 
-          // Fetch schedule (check if user is assigned)
+          // 🔥 Fetch deviceKey from users/userId/schedule
           final scheduleSnapshot = await _dbRef.child("$userId/schedule").get();
-          bool isAssigned = scheduleSnapshot.exists;
-
-          if (isAssigned) {
+          if (scheduleSnapshot.value != null) {
             Map<dynamic, dynamic> scheduleData = scheduleSnapshot.value as Map<dynamic, dynamic>;
             String? firstDeviceKey = scheduleData.keys.first;
 
-            // Fetch deviceName
+            // 🔥 Fetch deviceName from devices/deviceKey/deviceName
             final deviceSnapshot = await FirebaseDatabase.instance.ref("devices/$firstDeviceKey/deviceName").get();
-            if (deviceSnapshot.exists) {
+            if (deviceSnapshot.value != null) {
               user.deviceName = deviceSnapshot.value.toString();
             }
-
-            // Fetch shift
-            final shiftSnapshot = await FirebaseDatabase.instance.ref("users/$userId/schedule/$firstDeviceKey/shift").get();
-            if (shiftSnapshot.exists) {
-              user.shift = shiftSnapshot.value.toString();
-            }
-          } else {
-            user.deviceName = "Unassigned"; // Mark unassigned users
-            user.shift = "";
           }
 
           users.add(user);
         }
 
-        // Sort users: unassigned first, then by deviceName, then by shift
-        users.sort((a, b) {
-          // Unassigned users should be first
-          if (a.deviceName == "Unassigned" && b.deviceName != "Unassigned") return -1;
-          if (a.deviceName != "Unassigned" && b.deviceName == "Unassigned") return 1;
-
-          // Sort alphabetically by deviceName
-          int deviceComparison = a.deviceName.compareTo(b.deviceName);
-          if (deviceComparison != 0) return deviceComparison;
-
-          // Sort by shift order: AM → NN → PM
-          List<String> shiftOrder = ["AM", "NN", "PM"];
-          int shiftA = shiftOrder.indexOf(a.shift);
-          int shiftB = shiftOrder.indexOf(b.shift);
-          return shiftA.compareTo(shiftB);
-        });
-
         setState(() {
           userDataList = users;
-          _filterUsers(); // Apply filtering after sorting
+          _filterUsers(); // Apply filtering after fetching device names
         });
       }
     });
-  }
-
-  void _showAssignmentSuccessDialog(BuildContext context, UserData user, String deviceName, String shiftTime) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CircleAvatar(
-                  radius: 40,
-                  backgroundImage: user.profileImageUrl != null && user.profileImageUrl!.isNotEmpty
-                      ? NetworkImage(user.profileImageUrl!)
-                      : const AssetImage('assets/profile picture.png') as ImageProvider,
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  user.name,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  "Assigned to $deviceName",
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                ),
-                Text(
-                  "Shift: $shiftTime",
-                  style: const TextStyle(fontSize: 14, color: Colors.grey),
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.amber,
-                    foregroundColor: Colors.white,
-                  ),
-                  child: const Text("Close"),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
   }
 
   Widget _buildUserTile(UserData user) {
@@ -367,18 +284,39 @@ class _ScheduleState extends State<Schedule> {
     );
   }
 
-
   void _filterUsers() {
     setState(() {
-      filteredUserDataList = userDataList.where((user) {
+      // Apply the search filter and role/status filter first
+      List<UserData> filteredList = userDataList.where((user) {
         String query = searchQuery.toLowerCase();
         return (user.name.toLowerCase().contains(query) ||
             user.deviceName.toLowerCase().contains(query)) &&
-            user.role == 'Utility' &&
+            user.role == 'Utility' &&  // ✅ Ensures only Utility users
             user.status == 'Active';
       }).toList();
+
+      List<UserData> unassignedUsers = [];
+      List<UserData> assignedUsers = [];
+
+      for (var user in filteredList) {  // ✅ Use filteredList, NOT userDataList
+        if (user.deviceName == null || user.deviceName.isEmpty || user.deviceName == "Unknown Device") {
+          unassignedUsers.add(user);
+        } else {
+          assignedUsers.add(user);
+        }
+      }
+
+      // Sort unassigned users alphabetically by name
+      unassignedUsers.sort((a, b) => a.name.compareTo(b.name));
+
+      // Sort assigned users alphabetically by deviceName
+      assignedUsers.sort((a, b) => a.deviceName.compareTo(b.deviceName));
+
+      // Combine the two lists with unassigned first
+      filteredUserDataList = [...unassignedUsers, ...assignedUsers];
     });
   }
+
 
 
   void _showEditDialog(UserData user) {
@@ -482,62 +420,89 @@ class _ScheduleState extends State<Schedule> {
                             }).toList(),
                           ),
                           const SizedBox(height: 10),
-                ElevatedButton(
-                onPressed: (selectedDevice != null && selectedShift != null)
-                ? () async {
-                DatabaseReference deviceRef =
-                FirebaseDatabase.instance.ref('devices/$selectedDevice/deviceName');
-                DatabaseReference scheduleRef =
-                FirebaseDatabase.instance.ref('users/${user.id}/schedule/$selectedDevice');
-                DatabaseReference devii = FirebaseDatabase.instance
-                    .ref('devices/$selectedDevice/shift/$selectedShift/${user.id}');
-                DatabaseReference notificationRef =
-                FirebaseDatabase.instance.ref('notifications/assign/${user.id}');
-                DatabaseReference shiftRef =
-                FirebaseDatabase.instance.ref('shift/$selectedShift');
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              selectedShift != null ? shiftTimes[selectedShift]! : "Select Shift",
+                              style: const TextStyle(fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: (selectedDevice != null && selectedShift != null)
+                                ? () async {
+                              DatabaseReference deviceRef = FirebaseDatabase.instance.ref('devices/$selectedDevice/deviceName');
+                              DatabaseEvent deviceSnapshot = await deviceRef.once();
+                              String deviceName = deviceSnapshot.snapshot.value?.toString() ?? "Unknown Device";
 
-                // Fetch deviceName
-                DatabaseEvent deviceSnapshot = await deviceRef.once();
-                String deviceName =
-                deviceSnapshot.snapshot.value?.toString() ?? "Unknown Device";
+                              DatabaseReference scheduleRef = FirebaseDatabase.instance.ref('users/${user.id}/schedule');
+                              DataSnapshot scheduleSnapshot = await scheduleRef.get();
 
-                // Fetch shift time (real shift time instead of AM, NN, PM)
-                DatabaseEvent shiftSnapshot = await shiftRef.once();
-                String shiftTime =
-                shiftSnapshot.snapshot.value?.toString() ?? shiftTimes[selectedShift]!;
+                              bool alreadyAssigned = false;
 
-                // Get formatted timestamp
-                final now = DateTime.now();
-                final formattedDate = DateFormat('yyyy-MM-dd').format(now);
-                final formattedTime = DateFormat('HH:mm:ss').format(now);
+                              if (scheduleSnapshot.value != null) {
+                                Map<dynamic, dynamic> schedule = scheduleSnapshot.value as Map<dynamic, dynamic>;
+                                if (schedule.containsKey(selectedDevice)) {
+                                  alreadyAssigned = true;
+                                }
+                              }
 
-                // Update schedule & device shift
-                await scheduleRef.update({'shift': selectedShift});
-                await devii.set({'userId': user.id, 'name': user.name});
+                              if (alreadyAssigned) {
+                                // Show modal notification if user is already assigned to this device
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: Text("Assignment Conflict"),
+                                      content: Text("${user.name} is already assigned to $deviceName."),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(context),
+                                          child: Text("OK"),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                                return;
+                              }
 
-                // Push notification with correct shift time
-                String assignedKey = notificationRef.push().key!;
-                await notificationRef.child(assignedKey).set({
-                'name': user.name,
-                'status': "has been assigned to $deviceName at $shiftTime shift",
-                'date': formattedDate,
-                'time': formattedTime,
-                  'msg': "${user.name} has been assigned to $deviceName at $shiftTime shift",
-                'userId': user.id,
-                });
+                              // Proceed with assigning user if not already assigned
+                              DatabaseReference shiftRef = FirebaseDatabase.instance.ref('shift/$selectedShift');
+                              DatabaseEvent shiftSnapshot = await shiftRef.once();
+                              String shiftTime = shiftSnapshot.snapshot.value?.toString() ?? shiftTimes[selectedShift]!;
 
-                // Close the assignment dialog
-                Navigator.pop(context);
+                              DatabaseReference devii = FirebaseDatabase.instance.ref('devices/$selectedDevice/shift/$selectedShift/${user.id}');
+                              DatabaseReference notificationRef = FirebaseDatabase.instance.ref('notifications/assign/${user.id}');
 
-                // Show confirmation modal
-                _showAssignmentSuccessDialog(context, user, deviceName, shiftTime);
-                }
-                    : null,
-                style: ElevatedButton.styleFrom(
+                              final now = DateTime.now();
+                              final formattedDate = DateFormat('yyyy-MM-dd').format(now);
+                              final formattedTime = DateFormat('HH:mm:ss').format(now);
+
+                              await scheduleRef.child(selectedDevice.toString()).update({'shift': selectedShift});
+                              await devii.set({'userId': user.id, 'name': user.name});
+
+                              String assignedKey = notificationRef.push().key!;
+                              await notificationRef.child(assignedKey).set({
+                                'name': user.name,
+                                'status': "has been assigned to $deviceName at $shiftTime shift",
+                                'date': formattedDate,
+                                'time': formattedTime,
+                              });
+
+                              Navigator.pop(context);
+                            }
+                                : null,
+
+                            style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.amber,
                 foregroundColor: Colors.white,
                 ),
-                child: const Text("Assign"),
+                child: const Text("Change"),
                 ),
 
                         ],
@@ -618,23 +583,28 @@ class _ScheduleState extends State<Schedule> {
             ),
           ),
           Positioned(
-            top: 160,
+            top: 140, // Moves the search bar slightly up (previously 160)
             left: 16,
             right: 16,
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: "Search user...",
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(16, 0, 16, 10), // Adds bottom margin of 10
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: "Search user...",
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    searchQuery = value;
+                    _filterUsers();
+                  });
+                },
               ),
-              onChanged: (value) {
-                setState(() {
-                  searchQuery = value;
-                  _filterUsers();
-                });
-              },
             ),
           ),
+
+
           Positioned.fill(
             top: 200, // Adjusted to move the list slightly lower
             child: Column(

@@ -346,7 +346,7 @@ class _AccountManagementPageState extends State<AccountManagementPage> {
       _isLengthValid = password.length >= 8;
       _hasUpperCase = password.contains(RegExp(r'[A-Z]'));
       _hasNumber = password.contains(RegExp(r'[0-9]'));
-      _hasSymbol = password.contains(RegExp(r'[!@#\$%^&*(),.?":{}|<>]'));
+      _hasSymbol = password.contains(RegExp(r'[!@#\$%^&*(),.?":{}=+/|<>]-_;'));
     });
   }
   // **Updates password change timestamp in Realtime Database**
@@ -517,9 +517,13 @@ class _AccountManagementPageState extends State<AccountManagementPage> {
                               onPressed: _updateName,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.yellow[700],
+                                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16), // ✅ Adjusts button size
+                                textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold), // ✅ Bigger text
+                                minimumSize: const Size(75, 50), // ✅ Minimum width & height
                               ),
                               child: const Text('Save'),
                             ),
+
                           ],
                         ),
                       ),
@@ -615,9 +619,11 @@ class _AccountManagementPageState extends State<AccountManagementPage> {
                               _buildPasswordCriteria('Your password must be at least 8 characters long.', _isLengthValid),
                               _buildPasswordCriteria('Your password must contain at least one uppercase letter (A-Z).', _hasUpperCase),
                               _buildPasswordCriteria('Your password must contain at least one number (0-9).', _hasNumber),
-                              _buildPasswordCriteria('Your password must contain at least one special character (e.g., ! @ #  % ^ & *)', _hasSymbol),
+                              _buildPasswordCriteria('Your password must contain at least one special character (e.g., ! @ # % ^ & *)', _hasSymbol),
                             ],
                           ),
+
+
                           const SizedBox(height: 10),
                           ElevatedButton(
                             onPressed: (_isLengthValid && _hasUpperCase && _hasNumber && _hasSymbol && !_isSaving)
@@ -625,21 +631,13 @@ class _AccountManagementPageState extends State<AccountManagementPage> {
                                 : null, // Disable button if conditions are not met or saving is in progress
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.yellow[700],
-                              disabledBackgroundColor: Colors.grey, // Grey when disabled
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)), // Keep rounded shape
-                              padding: const EdgeInsets.symmetric(vertical: 12), // Adjust padding for better UI
+                              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16), // ✅ Adjusts button size
+                              textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold), // ✅ Bigger text
+                              minimumSize: const Size(75, 50), // ✅ Minimum width & height
                             ),
-                            child: _isSaving
-                                ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                                strokeWidth: 2, // Small and rounded loader
-                              ),
-                            )
-                                : const Text('Save'),
+                            child: const Text('Save'), // ✅ Moved inside the button correctly
                           ),
+
                         ],
                       ),
                     ),
@@ -778,8 +776,10 @@ class _AccountManagementPageState extends State<AccountManagementPage> {
       ),
     );
   }
-}Widget _buildPasswordCriteria(String text, bool isValid) {
+}
+Widget _buildPasswordCriteria(String text, bool isValid) {
   return Row(
+    crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Icon(
         isValid ? Icons.check_circle : Icons.cancel,
@@ -787,10 +787,15 @@ class _AccountManagementPageState extends State<AccountManagementPage> {
         size: 18,
       ),
       const SizedBox(width: 5),
-      Text(
-        text,
-        style: TextStyle(color: isValid ? Colors.green : Colors.grey),
+      Flexible(
+        child: Text(
+          text,
+          style: TextStyle(color: isValid ? Colors.green : Colors.grey),
+          softWrap: true,
+        ),
       ),
+
     ],
   );
 }
+

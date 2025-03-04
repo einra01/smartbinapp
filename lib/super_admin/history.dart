@@ -131,82 +131,98 @@ class _HistoryLogsScreenState extends State<HistoryLogsScreen1> {
               ),
             ),
           ),
-      Positioned(
-        top: 150,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: StreamBuilder(
-              stream: _databaseRef.child("logged").onValue,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                if (snapshot.hasError) {
-                  return const Center(child: Text('Failed to load notifications.'));
-                }
+          Positioned(
+            top: 150,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: StreamBuilder(
+                  stream: _databaseRef.child("logged").onValue,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    if (snapshot.hasError) {
+                      return const Center(child: Text('Failed to load notifications.'));
+                    }
 
-                if (!snapshot.hasData || snapshot.data!.snapshot.value == null) {
-                  return const Center(child: Text('No notifications available.'));
-                }
+                    if (!snapshot.hasData || snapshot.data!.snapshot.value == null) {
+                      return const Center(child: Text('No notifications available.'));
+                    }
 
-                final dynamic data = snapshot.data!.snapshot.value;
-                List<Map<String, dynamic>> allNotifications = [];
+                    final dynamic data = snapshot.data!.snapshot.value;
+                    List<Map<String, dynamic>> allNotifications = [];
 
-                if (data is Map) {
-                  data.forEach((userId, userLogs) {
-                    if (userLogs is Map) {
-                      userLogs.forEach((logKey, logData) {
-                        if (logData is Map) {
-                          allNotifications.add({
-                            'msg': logData['msg'] ?? 'No message',
-                            'time': logData['time'] ?? 'Unknown time',
+                    if (data is Map) {
+                      data.forEach((userId, userLogs) {
+                        if (userLogs is Map) {
+                          userLogs.forEach((logKey, logData) {
+                            if (logData is Map) {
+                              allNotifications.add({
+                                'userId': userId, // Store userId to fetch name
+                                'status': logData['status'] ?? 'No status',
+                                'time': logData['time'] ?? 'Unknown time',
+                              });
+                            }
                           });
                         }
                       });
-                    }
-                  });
 
-                  allNotifications.sort((a, b) => (b['time'] ?? '').compareTo(a['time'] ?? ''));
+                      allNotifications.sort((a, b) => (b['time'] ?? '').compareTo(a['time'] ?? ''));
 
-                  return Column(
-                    children: allNotifications.map((log) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Container(
-                          padding: const EdgeInsets.all(12.0),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                log['msg'],
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                              Text(
-                                log['time'],
-                                style: const TextStyle(fontSize: 14, color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                        ),
+                      return Column(
+                        children: allNotifications.map((log) {
+                          return FutureBuilder(
+                            future: FirebaseDatabase.instance.ref("users/${log['userId']}/name").get(),
+                            builder: (context, nameSnapshot) {
+                              String displayName = "Unknown User";
+                              if (nameSnapshot.hasData && nameSnapshot.data!.value != null) {
+                                displayName = nameSnapshot.data!.value.toString();
+                              }
+
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                child: Container(
+                                  padding: const EdgeInsets.all(12.0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[300],
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        displayName, // ✅ Now it correctly fetches the user's name!
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                      Text(
+                                        log['status'],
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                      Text(
+                                        log['time'],
+                                        style: const TextStyle(fontSize: 14, color: Colors.grey),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        }).toList(),
                       );
-                    }).toList(),
-                  );
-                } else {
-                  return const Center(child: Text('Unexpected data format.'));
-                }
-              },
+                    } else {
+                      return const Center(child: Text('Unexpected data format.'));
+                    }
+                  },
+                ),
+              ),
             ),
           ),
-        ),
-      ),
+
 
         ],
       ),
