@@ -1,21 +1,22 @@
 {
   "project_info": {
-    "project_number": "1010142008650",
-    "project_id": "smartaccount-9ad1d",
-    "storage_bucket": "smartaccount-9ad1d.firebasestorage.app"
+    "project_number": "177273556728",
+    "firebase_url": "https://iqkd-f7193-default-rtdb.firebaseio.com",
+    "project_id": "iqkd-f7193",
+    "storage_bucket": "iqkd-f7193.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1010142008650:android:cb6b6fca170ea23b921db3",
+        "mobilesdk_app_id": "1:177273556728:android:9a3086a9100066929df50d",
         "android_client_info": {
-          "package_name": "com.example.smartbin"
+          "package_name": "com.example.ix"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAL7rSSCqrtIu3_-Iy1B9Gs5OrsRwCReUQ"
+          "current_key": "AIzaSyBDQ4fP4UCuANGZq-H4ewxHmYZnHFPGjmo"
         }
       ],
       "services": {
@@ -26,15 +27,15 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1010142008650:android:4dabaf300bc19433921db3",
+        "mobilesdk_app_id": "1:177273556728:android:e383167f379029ca9df50d",
         "android_client_info": {
-          "package_name": "com.example.testbinaccount"
+          "package_name": "com.example.smartbin"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAL7rSSCqrtIu3_-Iy1B9Gs5OrsRwCReUQ"
+          "current_key": "AIzaSyBDQ4fP4UCuANGZq-H4ewxHmYZnHFPGjmo"
         }
       ],
       "services": {

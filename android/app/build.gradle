@@ -7,13 +7,15 @@ plugins {
 
 android {
     namespace = "com.example.smartbin"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 34
     ndkVersion = flutter.ndkVersion
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
+
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_17
+            targetCompatibility JavaVersion.VERSION_17
+        }
+
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8
@@ -26,7 +28,7 @@ android {
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdkVersion 23 // Change this to 23 or higher
         //noinspection EditedTargetSdkVersion,ExpiredTargetSdkVersion
-        targetSdk = flutter.targetSdkVersion
+        targetSdk = 34
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
@@ -49,4 +51,5 @@ apply plugin: 'com.google.gms.google-services'
 dependencies {
     implementation platform("com.google.firebase:firebase-bom:33.5.1")
     implementation "com.google.firebase:firebase-analytics"
+    implementation 'com.google.android.gms:play-services-auth:20.7.0'
 }
