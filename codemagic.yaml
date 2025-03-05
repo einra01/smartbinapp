@@ -64,6 +64,13 @@ workflows:
       xcode: latest # <-- set to specific version e.g. 14.3, 15.0 to avoid unexpected updates.
       cocoapods: default
     scripts:
+      - scripts:
+          - name: Install correct CocoaPods version
+            script: |
+              sudo gem install cocoapods -v 1.16.2
+              pod setup
+              pod install --repo-update
+
       - name: Set up code signing settings on Xcode project
         script: |
           xcode-project use-profiles
