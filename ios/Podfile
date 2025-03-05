@@ -1,4 +1,9 @@
+require_relative './PodHelperfile'
+
 platform :ios, '13.0'
+
+
+
 
 # Automatically detect Flutter SDK path (for Codemagic)
 flutter_root = File.expand_path('..', Dir.pwd) + '/flutter'
