@@ -57,7 +57,7 @@ class _DashboardScreenState extends State<DashboardScreen1> with SingleTickerPro
   @override
   void initState() {
     super.initState();
-
+    _fetchAssignedUsers();
     _checkUserLoggedIn();
     _fetchUser();
     _fetchUserData();
