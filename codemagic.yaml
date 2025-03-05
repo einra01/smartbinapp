@@ -13,6 +13,12 @@ workflows:
         GOOGLE_PLAY_TRACK: "alpha"
       flutter: stable
     scripts:
+      - scripts:
+          - rbenv global 3.3.6
+          - gem install bundler cocoapods
+          - bundle install
+          - cd ios && pod install
+
       - name: Set up local.properties
         script: |
           echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
@@ -88,9 +94,7 @@ workflows:
       - name: Get Flutter packages
         script: |
           flutter packages pub get
-      - name: Install pods
-        script: |
-          find . -name "Podfile" -execdir pod install \;
+      
 
       - name: Flutter analyze
         script: |

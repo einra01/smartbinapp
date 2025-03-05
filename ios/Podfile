@@ -2,7 +2,6 @@ require_relative './PodHelper'
 
 platform :ios, '13.0'
 
-
 require_relative '../flutter/bin/flutter'
 require_relative '../flutter/bin/internal/shared.sh'
 flutter_ios_podfile_setup
@@ -14,7 +13,6 @@ target 'Runner' do
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
 
-
 # Automatically detect Flutter SDK path (for Codemagic)
 flutter_root = File.expand_path('..', Dir.pwd) + '/flutter'
 podhelper_path = File.expand_path(File.join(flutter_root, 'packages', 'flutter_tools', 'bin', 'podhelper'))
@@ -23,13 +21,4 @@ if File.exist?(podhelper_path)
   require podhelper_path
 else
   puts "Warning: podhelper file is missing, skipping..."
-end
-
-flutter_ios_podfile_setup
-
-target 'Runner' do
-  use_frameworks!
-  use_modular_headers!
-
-  flutter_install_all_ios_pods(File.dirname(File.realpath(__FILE__)))
 end
