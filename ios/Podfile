@@ -1,4 +1,4 @@
-require_relative './PodHelper'
+require_relative './PodHelper.rb'
 
 platform :ios, '13.0'
 
