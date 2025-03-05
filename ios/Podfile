@@ -3,15 +3,16 @@ platform :ios, '13.0'
 
 
 
-# Define the target
+require File.expand_path('../flutter/bin/flutter', __dir__)
+load File.join(__dir__, 'flutter_export_environment.sh')
+
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
-flutter_install_all_ios_pods(File.dirname(File.realpath(__FILE__)))
-
-
+  flutter_install_all_ios_pods(File.dirname(File.realpath(__FILE__)))
 end
+
 
 # Ensure Flutter is properly configured
 require File.expand_path(File.join('..', 'flutter', 'packages', 'flutter_tools', 'bin', 'podhelper'))
