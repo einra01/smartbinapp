@@ -2,9 +2,15 @@
 platform :ios, '13.0'
 
 
+# Ensure this path is correct
+flutter_root = File.expand_path('..', Dir.pwd) + '/flutter'
+unless File.exist?(flutter_root)
+  raise "Flutter SDK not found at: #{flutter_root}"
+end
 
-require File.expand_path('../flutter/bin/flutter', __dir__)
-load File.join(__dir__, 'flutter_export_environment.sh')
+require File.expand_path(File.join(flutter_root, 'packages', 'flutter_tools', 'bin', 'podhelper'))
+
+flutter_ios_podfile_setup
 
 target 'Runner' do
   use_frameworks!

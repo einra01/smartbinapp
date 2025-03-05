@@ -64,6 +64,17 @@ workflows:
       xcode: latest # <-- set to specific version e.g. 14.3, 15.0 to avoid unexpected updates.
       cocoapods: default
     scripts:
+
+      - name: Install Flutter & CocoaPods
+        script: |
+            git clone https://github.com/flutter/flutter.git -b stable
+            export PATH="$PATH:`pwd`/flutter/bin"
+            flutter doctor
+            flutter pub get
+            sudo gem install cocoapods -v 1.16.2
+            pod repo update
+            rm -rf ios/Pods ios/Podfile.lock
+            pod install
       - name: Fix CocoaPods and Install Dependencies
         script: |
             sudo gem uninstall cocoapods --all --executables || true
@@ -80,6 +91,7 @@ workflows:
       - name: Install pods
         script: |
           find . -name "Podfile" -execdir pod install \;
+
       - name: Flutter analyze
         script: |
           flutter analyze
