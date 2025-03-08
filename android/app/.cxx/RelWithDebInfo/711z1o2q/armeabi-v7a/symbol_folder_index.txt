@@ -1,0 +1,1 @@
+C:\Users\ramos\AndroidStudioProjects\SmartBin\smartbinapp\build\app\intermediates\cxx\RelWithDebInfo\711z1o2q\obj\armeabi-v7a
