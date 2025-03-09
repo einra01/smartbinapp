@@ -10,6 +10,9 @@
 	<string>177273556728-oi1sq27bkdtffq5n2acf8m7skkpdm3mm.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyAqxphX3B0hxJxwUkfcosqssAYtaxqiCDk</string>
+	<key>MinimumOSVersion</key>
+    <string>13.0</string>
+
 	<key>GCM_SENDER_ID</key>
 	<string>177273556728</string>
 	<key>PLIST_VERSION</key>
