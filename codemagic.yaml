@@ -27,7 +27,8 @@ workflows:
       email:
         recipients:
           - ramos.marklawrence.03042002@gmail.com
-        notify: success
+        notify:
+          success: true
       scripts:
         - name: Debug email step
           script: echo "Email notification should be sent."
