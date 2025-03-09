@@ -213,7 +213,7 @@ class _UtilityProfileState extends State<UtilityProfile> {
                       backgroundImage: NetworkImage(imageUrl),
                     ),
                     SizedBox(height: 10),
-                    Text("Profile image updated successfully!"),
+                  const  Text("Profile image updated successfully!"),
                   ],
                 ),
                 actions: <Widget>[
@@ -348,126 +348,129 @@ class _UtilityProfileState extends State<UtilityProfile> {
       backgroundColor: Colors.grey[200],
       body: Column(
         children: [
+          // Fixed Header Section
+          Stack(
+            children: [
+              SizedBox(
+                height: 198,
+                width: double.infinity,
+                child: Container(
+                  color: Colors.amber.withOpacity(0.57),
+                ),
+              ),
+              Column(
+                children: [
+                  const SizedBox(height: 124),
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Column(
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              height: 75,
+                              decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Color(0xFFF1C74B),
+                                    Color(0xFFD19A29),
+                                  ],
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                ),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(16),
+                                  topRight: Radius.circular(16),
+                                ),
+                              ),
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Text(
+                                  _name,
+                                  style: const TextStyle(
+                                    fontSize: 17.5,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: double.infinity,
+                              height: 55,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: const BorderRadius.only(
+                                  bottomLeft: Radius.circular(16),
+                                  bottomRight: Radius.circular(16),
+                                ),
+                              ),
+                              child: const Text(
+                                'UTILITY STAFF',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Positioned(
+                        top: -30,
+                        left: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: () => _showImagePreview(
+                            context,
+                            _profileImageUrl,
+                            _pickAndUploadImage,
+                          ),
+                          child: Center(
+                            child: Stack(
+                              children: [
+                                CircleAvatar(
+                                  radius: 30,
+                                  backgroundImage: _profileImageUrl.isNotEmpty
+                                      ? NetworkImage(_profileImageUrl)
+                                      : AssetImage('assets/profile picture.png')
+                                  as ImageProvider,
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(4),
+                                    decoration: const BoxDecoration(
+                                      color: Colors.amber,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Icon(Icons.edit, size: 16, color: Colors.white),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+
+          // Scrollable Content
           Expanded(
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Stack(
-                    children: [
-                      // Fixed-size amber container
-                      SizedBox(
-                        height: 198, // Fixed height
-                        width: double.infinity, // Full width
-                        child: Container(
-                          color: Colors.amber.withOpacity(0.57),
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          SizedBox(height: 124), // Adjusted spacing
-                          Stack(
-                            clipBehavior: Clip.none,
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.symmetric(horizontal: 16),
-                                child: Column(
-                                  children: [
-                                    // Fixed header height
-                                    Container(
-                                      width: double.infinity,
-                                      height: 75,
-                                      decoration: const BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            Color(0xFFF1C74B), // Lighter amber
-                                            Color(0xFFD19A29), // Lighter dark amber
-                                          ],
-                                          begin: Alignment.topCenter,
-                                          end: Alignment.bottomCenter,
-                                        ),
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(16),
-                                          topRight: Radius.circular(16),
-                                        ),
-                                      ),
-                                      padding: const EdgeInsets.only(bottom: 8),
-                                      child: Align(
-                                        alignment: Alignment.bottomCenter,
-                                        child: Text(
-                                          _name,
-                                          style: const TextStyle(
-                                            fontSize: 17.5,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-
-                                    // Gray section
-                                    Container(
-                                      width: double.infinity,
-                                      height: 55,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[300],
-                                        borderRadius: const BorderRadius.only(
-                                          bottomLeft: Radius.circular(16),
-                                          bottomRight: Radius.circular(16),
-                                        ),
-                                      ),
-                                      child: const Text(
-                                        'UTILITY STAFF',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              // Profile image
-                              Positioned(
-                                top: -30,
-                                left: 0,
-                                right: 0,
-                                child: GestureDetector(
-                                  onTap: () => _showImagePreview(context, _profileImageUrl, _pickAndUploadImage),
-                                  child: Center(
-                                    child: Stack(
-                                      children: [
-                                        CircleAvatar(
-                                          radius: 30,
-                                          backgroundImage: _profileImageUrl.isNotEmpty
-                                              ? NetworkImage(_profileImageUrl)
-                                              : AssetImage('assets/profile picture.png') as ImageProvider,
-                                        ),
-                                        Positioned(
-                                          bottom: 0,
-                                          right: 0,
-                                          child: Container(
-                                            padding: const EdgeInsets.all(4),
-                                            decoration: BoxDecoration(color: Colors.amber, shape: BoxShape.circle),
-                                            child: const Icon(Icons.edit, size: 16, color: Colors.white),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 10), // Adjusted vertical spacing
-
-                  // ACCOUNT MANAGEMENT Section
+                  const SizedBox(height: 10),
                   Container(
                     color: Colors.grey[200],
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -478,15 +481,13 @@ class _UtilityProfileState extends State<UtilityProfile> {
                         NavigationItem(
                           icon: Icons.account_circle_outlined,
                           label: 'ACCOUNT MANAGEMENT',
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => AccountManagementPage1(),
-                              ),
-                            );
-                          },
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => AccountManagementPage1()),
+                          ),
                         ),
+
+
                       ],
                     ),
                   ),
@@ -495,9 +496,9 @@ class _UtilityProfileState extends State<UtilityProfile> {
             ),
           ),
 
-          // Logout Button at Bottom
+          // Fixed Logout Button
           Padding(
-            padding: const EdgeInsets.only(bottom: 40), // Space from bottom edge
+            padding: const EdgeInsets.only(bottom: 10),
             child: GestureDetector(
               onTap: _logout,
               child: Container(
@@ -523,7 +524,7 @@ class _UtilityProfileState extends State<UtilityProfile> {
         ],
       ),
 
-      // Bottom Navigation Bar
+  // Bottom Navigation Bar
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(bottom: 20.0), // Moves it up
         child: ClipRRect(

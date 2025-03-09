@@ -354,126 +354,129 @@ class _SuperAdminAppState extends State<SuperAdminApp> {
       backgroundColor: Colors.grey[200],
       body: Column(
         children: [
+          // Fixed Header Section
+          Stack(
+            children: [
+              SizedBox(
+                height: 198,
+                width: double.infinity,
+                child: Container(
+                  color: Colors.amber.withOpacity(0.57),
+                ),
+              ),
+              Column(
+                children: [
+                  const SizedBox(height: 124),
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Column(
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              height: 75,
+                              decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Color(0xFFF1C74B),
+                                    Color(0xFFD19A29),
+                                  ],
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                ),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(16),
+                                  topRight: Radius.circular(16),
+                                ),
+                              ),
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Text(
+                                  _name,
+                                  style: const TextStyle(
+                                    fontSize: 17.5,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: double.infinity,
+                              height: 55,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: const BorderRadius.only(
+                                  bottomLeft: Radius.circular(16),
+                                  bottomRight: Radius.circular(16),
+                                ),
+                              ),
+                              child: const Text(
+                                'ADMIN STAFF',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Positioned(
+                        top: -30,
+                        left: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: () => _showImagePreview(
+                            context,
+                            _profileImageUrl,
+                            _pickAndUploadImage,
+                          ),
+                          child: Center(
+                            child: Stack(
+                              children: [
+                                CircleAvatar(
+                                  radius: 30,
+                                  backgroundImage: _profileImageUrl.isNotEmpty
+                                      ? NetworkImage(_profileImageUrl)
+                                      : AssetImage('assets/profile picture.png')
+                                  as ImageProvider,
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(4),
+                                    decoration: const BoxDecoration(
+                                      color: Colors.amber,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Icon(Icons.edit, size: 16, color: Colors.white),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+
+          // Scrollable Content
           Expanded(
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Stack(
-                    children: [
-                      // Fixed-size amber container
-                      SizedBox(
-                        height: 198, // Fixed height
-                        width: double.infinity, // Full width
-                        child: Container(
-                          color: Colors.amber.withOpacity(0.57),
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          SizedBox(height: 124), // Adjusted spacing
-                          Stack(
-                            clipBehavior: Clip.none,
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.symmetric(horizontal: 16),
-                                child: Column(
-                                  children: [
-                                    // Fixed header height
-                                    Container(
-                                      width: double.infinity,
-                                      height: 75,
-                                      decoration: const BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            Color(0xFFF1C74B), // Lighter amber
-                                            Color(0xFFD19A29), // Lighter dark amber
-                                          ],
-                                          begin: Alignment.topCenter,
-                                          end: Alignment.bottomCenter,
-                                        ),
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(16),
-                                          topRight: Radius.circular(16),
-                                        ),
-                                      ),
-                                      padding: const EdgeInsets.only(bottom: 8),
-                                      child: Align(
-                                        alignment: Alignment.bottomCenter,
-                                        child: Text(
-                                          _name,
-                                          style: const TextStyle(
-                                            fontSize: 17.5,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-
-                                    // Gray section
-                                    Container(
-                                      width: double.infinity,
-                                      height: 55,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[300],
-                                        borderRadius: const BorderRadius.only(
-                                          bottomLeft: Radius.circular(16),
-                                          bottomRight: Radius.circular(16),
-                                        ),
-                                      ),
-                                      child: const Text(
-                                        'ADMIN STAFF',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              // Profile image
-                              Positioned(
-                                top: -30,
-                                left: 0,
-                                right: 0,
-                                child: GestureDetector(
-                                  onTap: () => _showImagePreview(context, _profileImageUrl, _pickAndUploadImage),
-                                  child: Center(
-                                    child: Stack(
-                                      children: [
-                                        CircleAvatar(
-                                          radius: 30,
-                                          backgroundImage: _profileImageUrl.isNotEmpty
-                                              ? NetworkImage(_profileImageUrl)
-                                              : AssetImage('assets/profile picture.png') as ImageProvider,
-                                        ),
-                                        Positioned(
-                                          bottom: 0,
-                                          right: 0,
-                                          child: Container(
-                                            padding: const EdgeInsets.all(4),
-                                            decoration: BoxDecoration(color: Colors.amber, shape: BoxShape.circle),
-                                            child: const Icon(Icons.edit, size: 16, color: Colors.white),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 10), // Adjusted vertical spacing
-
-                  // ACCOUNT MANAGEMENT Section
+                  const SizedBox(height: 10),
                   Container(
                     color: Colors.grey[200],
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -481,95 +484,62 @@ class _SuperAdminAppState extends State<SuperAdminApp> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 10),
-                        // Navigation Items
                         NavigationItem(
                           icon: Icons.account_circle_outlined,
                           label: 'ACCOUNT MANAGEMENT',
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => AccountManagementPage(),
-                              ),
-                            );
-                          },
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => AccountManagementPage()),
+                          ),
                         ),
                         NavigationItem(
                           icon: Icons.add_circle_outline,
                           label: 'ACCOUNT CREATION',
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Create(userId: '',),
-                              ),
-                            );
-                          },
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Create(userId: '',)),
+                          ),
                         ),
                         NavigationItem(
                           icon: Icons.remove_circle_outline,
                           label: 'USER LIST',
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => AccountDeactPage(),
-                              ),
-                            );
-                          },
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => AccountDeactPage()),
+                          ),
                         ),
                         NavigationItem(
                           icon: Icons.history,
                           label: 'HISTORY LOGS',
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => HistoryLogsScreen1(),
-                              ),
-                            );
-                          },
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => HistoryLogsScreen1()),
+                          ),
                         ),
                         NavigationItem(
                           icon: Icons.devices_other,
                           label: 'BIN/DEVICES',
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Devices(),
-                              ),
-                            );
-                          },
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Devices()),
+                          ),
                         ),
                         NavigationItem(
                           icon: Icons.wifi,
                           label: 'CONNECTION',
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Devicess(),
-                              ),
-                            );
-                          },
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Devicess()),
+                          ),
                         ),
                         NavigationItem(
                           icon: Icons.assignment_turned_in,
                           label: 'SCHEDULE',
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Schedule(),
-                              ),
-                            );
-                          },
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Schedule()),
+                          ),
                         ),
-                        // Centered Logout Button
-
-
-
                       ],
                     ),
                   ),
@@ -578,9 +548,9 @@ class _SuperAdminAppState extends State<SuperAdminApp> {
             ),
           ),
 
-          // Logout Button at Bottom
+          // Fixed Logout Button
           Padding(
-            padding: const EdgeInsets.only(bottom: 10), // Space from bottom edge
+            padding: const EdgeInsets.only(bottom: 10),
             child: GestureDetector(
               onTap: _logout,
               child: Container(
@@ -608,16 +578,16 @@ class _SuperAdminAppState extends State<SuperAdminApp> {
 
       // Bottom Navigation Bar
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(bottom: 20.0), // Moves it up
+        padding: const EdgeInsets.only(bottom: 20.0),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(20), // ✅ Rounds all corners
+          borderRadius: BorderRadius.circular(20),
           child: BottomAppBar(
             shape: const CircularNotchedRectangle(),
             notchMargin: 8.0,
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.grey[300], // ✅ Apply color here
-                borderRadius: BorderRadius.circular(20), // ✅ Ensure all corners are rounded
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(20),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Row(
@@ -625,29 +595,23 @@ class _SuperAdminAppState extends State<SuperAdminApp> {
                 children: [
                   IconButton(
                     icon: const Icon(Icons.notifications, color: Colors.black),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => NotificationScreen()),
-                      );
-                    },
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => NotificationScreen()),
+                    ),
                   ),
                   IconButton(
                     icon: const Icon(Icons.home, color: Colors.black),
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => DashboardScreen()),
-                      );
-                    },
+                    onPressed: () => Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => DashboardScreen()),
+                    ),
                   ),
                   InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => SuperAdminApp()),
-                      );
-                    },
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SuperAdminApp()),
+                    ),
                     child: ClipOval(
                       child: _profileImageUrl.isNotEmpty
                           ? Image.network(
@@ -671,11 +635,9 @@ class _SuperAdminAppState extends State<SuperAdminApp> {
         ),
       ),
     );
-
   }
 }
-
-class NavigationItem extends StatelessWidget {
+  class NavigationItem extends StatelessWidget {
   final IconData icon;
   final String label;
   final VoidCallback onTap; // Correct type for a callback

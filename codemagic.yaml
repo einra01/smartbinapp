@@ -1,86 +1,46 @@
 workflows:
-  flutter_workflow:
-    name: "Flutter"
+  sample-workflow:
+    name: Codemagic Sample Workflow
     max_build_duration: 120
-    environment:
-      flutter: stable
-      xcode: latest
-      java: 17
-      vars:
-        PACKAGE_NAME: "com.example.smartbin"
+    instance_type: mac_mini_m2
 
-name: iOS-ipa-build
+  workflows:
 
-on:
-  workflow_dispatch:
+  android-workflow-id:
 
-jobs:
-  build-ios:
-    name: 🎉 iOS Build
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v3
+    name: Android Sample Workflow
 
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          architecture: x64
+    # .......
 
-      - name: Verify Flutter Environment
-        run: flutter doctor -v
+    # .......
 
-      - name: Clean Derived Data
-        run: |
-          rm -rf ~/Library/Developer/Xcode/DerivedData
+    # .......
 
-      - name: Clean and Fetch Dependencies
-        run: |
-          flutter clean
-          flutter pub get
+  ios-workflow-id:
 
-      - name: Verify exportOptions.plist Exists
-        run: |
-          if [ ! -f ios/exportOptions.plist ]; then
-            echo "🚨 exportOptions.plist is missing!"
-            exit 1
-          fi
+        name: iOS Sample Workflow
 
-      - name: Verify exportOptions.plist Contents
-        run: cat ios/exportOptions.plist
-
-      - name: Install CocoaPods
-        run: pod install --repo-update
-        working-directory: ios
-
-      - name: Build iOS IPA
-        run: |
-          set -e  # Fail immediately if any command fails
-          flutter build ipa --release --export-options-plist=ios/exportOptions.plist
-
-      - name: Debug IPA Path
-        run: ls -R build/ios/iphoneos/
-
-      - name: Upload binaries to release
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: build/ios/iphoneos/*.ipa
-          tag: v1.0
-          overwrite: true
-          body: "This is first release"
-
-      - name: Send Email with IPA
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          username: ${{ secrets.EMAIL_USERNAME }}
-          password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: "🚀 New iOS Build Available!"
-          body: "Your latest .ipa build is attached."
-          to: "ramos.marklawrence.03042002@gmail.com"
-          from: "Codemagic CI"
-          attachments: build/ios/iphoneos/*.ipa
-
-      - name: Debug Email Log
-        run: echo "Email sent successfully"
+    # ......
+        scripts:
+          - name: Set up code signing settings on Xcode project
+            script: |
+              xcode-project use-profiles
+          - name: Get Flutter packages
+            script: |
+              flutter pub get
+          - name: Install pods
+            script: |
+              find . -name "Podfile" -execdir pod install \;
+          - name: Flutter build ipa
+            script: |
+              flutter build ipa --release \
+                --build-name=1.0.0 \
+                --export-options-plist=/Users/builder/export_options.plist
+        artifacts:
+          - build/ios/ipa/*.ipa
+          - /tmp/xcodebuild_logs/*.log
+          - flutter_drive.log
+publishing:
+      email:
+        recipients:
+          - ramos.marklawrence.03042002@gmail.com
