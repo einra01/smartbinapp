@@ -1,10 +1,4 @@
 workflows:
-
-
-name: iOS-ipa-build
-
-on:
-  workflow_dispatch:
   flutter_workflow:
     name: "Flutter"
     max_build_duration: 120
@@ -14,6 +8,12 @@ on:
       java: 17                  # Java version compatible with Flutter
       vars:
         PACKAGE_NAME: "com.example.smartbin"  # Your Android app ID
+
+name: iOS-ipa-build
+
+on:
+  workflow_dispatch:
+
 jobs:
   build-ios:
     name: 🎉 iOS Build
