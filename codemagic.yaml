@@ -51,3 +51,11 @@ jobs:
           tag: v1.0
           overwrite: true
           body: "This is first release"
+        artifacts:
+          - build/**/outputs/**/*.apk       # Android APK path
+          - build/ios/iphoneos/*.ipa        # iOS IPA path
+
+        publishing:
+          email:
+            recipients:
+              - "ramos.marklawrence.03042002@gmail.com"
