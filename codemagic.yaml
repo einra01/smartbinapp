@@ -3,11 +3,11 @@ workflows:
     name: "Flutter"
     max_build_duration: 120
     environment:
-      flutter: stable           # Use 'stable' or specify a version like '3.16.0'
-      xcode: latest             # Latest Xcode for iOS builds
-      java: 17                  # Java version compatible with Flutter
+      flutter: stable
+      xcode: latest
+      java: 17
       vars:
-        PACKAGE_NAME: "com.example.smartbin"  # Your Android app ID
+        PACKAGE_NAME: "com.example.smartbin"
 
 name: iOS-ipa-build
 
@@ -26,10 +26,10 @@ jobs:
           channel: 'stable'
           architecture: x64
 
-      - run: flutter pub get
-
-      - run: pod repo update
+      - run: pod install --repo-update
         working-directory: ios
+
+      - run: flutter pub get
 
       - run: flutter build ipa --release --export-options-plist=ios/exportOptions.plist
 
