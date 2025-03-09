@@ -26,15 +26,32 @@ jobs:
           channel: 'stable'
           architecture: x64
 
-      - run: pod install --repo-update
+      - name: Verify Flutter Environment
+        run: flutter doctor -v
+
+      - name: Clean and Fetch Dependencies
+        run: |
+          flutter clean
+          flutter pub get
+
+      - name: Verify exportOptions.plist Exists
+        run: |
+          if [ ! -f ios/exportOptions.plist ]; then
+            echo "🚨 exportOptions.plist is missing!"
+            exit 1
+          fi
+
+      - name: Install CocoaPods
+        run: pod install --repo-update
         working-directory: ios
 
-      - run: flutter pub get
-
-      - run: flutter build ipa --release --export-options-plist=ios/exportOptions.plist
+      - name: Build iOS IPA
+        run: |
+          set -e  # Fail immediately if any command fails
+          flutter build ipa --release --export-options-plist=ios/exportOptions.plist
 
       - name: Debug IPA Path
-        run: ls -R build/ios/ipa
+        run: ls -R build/ios/ipa/
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
