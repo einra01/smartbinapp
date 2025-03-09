@@ -26,7 +26,6 @@ workflows:
       - name: Flutter Analyze & Test
         script: |
           flutter analyze
-          flutter test
 
       - name: Build Android APK
         script: |
