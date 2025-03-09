@@ -24,3 +24,7 @@ publishing:
       email:
         recipients:
           - ramos.marklawrence.03042002@gmail.com
+        notify: success
+      scripts:
+        - name: Debug email step
+          script: echo "Email notification should be sent."
