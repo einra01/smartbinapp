@@ -14,7 +14,11 @@ workflows:
         PROVISIONING_PROFILE_PATH: $CM_PROVISIONING_PROFILE_PATH
 
     artifacts:
-      - build/ios/iphoneos/*.ipa
+      - build/ios/ipa/*.ipa    # iOS .ipa file for distribution
+      - build/ios/ipa/*.app    # Optional: .app file for simulator testing
+      - build/ios/archive/*.xcarchive  # Archive file for manual uploads
+      - ios/Flutter/*.dSYM.zip # Debug symbols for crash reporting (e.g., Sentry, Firebase)
+      - build/**/*.log         # Logs for troubleshooting
 
     publishing:
       email:
