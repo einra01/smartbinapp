@@ -1,26 +1,7 @@
-workflows:
-  flutter_workflow:
-    name: "Flutter"
-    max_build_duration: 120
-    environment:
-      flutter: stable           # Use 'stable' or specify a version like '3.16.0'
-      xcode: latest             # Latest Xcode for iOS builds
-      java: 17                  # Java version compatible with Flutter
-      vars:
-        PACKAGE_NAME: "com.example.smartbin"  # Your Android app ID
-
 name: iOS-ipa-build
 
 on:
   workflow_dispatch:
-    artifacts:
-      - build/**/outputs/**/*.apk       # Android APK path
-      - build/ios/iphoneos/*.ipa        # iOS IPA path
-
-    publishing:
-      email:
-        recipients:
-          - "ramos.marklawrence.03042002@gmail.com"
 
 jobs:
   build-ios:
@@ -33,29 +14,32 @@ jobs:
         with:
           channel: 'stable'
           architecture: x64
-      - run: flutter pub get
 
+      - run: flutter pub get
 
       - run: pod repo update
         working-directory: ios
 
-      - run: flutter build ios --release --no-codesign
-
-      - run: mkdir Payload
-        working-directory: build/ios/iphoneos
-
-      - run: mv Runner.app/ Payload
-        working-directory: build/ios/iphoneos
-
-      - name: Zip output
-        run: zip -qq -r -9 FlutterIpaExport.ipa Payload
-        working-directory: build/ios/iphoneos
+      - run: flutter build ipa --release --export-options-plist=ios/exportOptions.plist
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: build/ios/iphoneos/FlutterIpaExport.ipa
+          file: build/ios/ipa/*.ipa
           tag: v1.0
           overwrite: true
           body: "This is first release"
+
+      - name: Send Email with IPA
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "🚀 New iOS Build Available!"
+          body: "Your latest .ipa build is attached."
+          to: "ramos.marklawrence.03042002@gmail.com"
+          from: "Codemagic CI"
+          attachments: build/ios/ipa/*.ipa
