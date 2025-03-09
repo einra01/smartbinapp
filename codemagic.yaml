@@ -29,6 +29,10 @@ jobs:
       - name: Verify Flutter Environment
         run: flutter doctor -v
 
+      - name: Clean Derived Data
+        run: |
+          rm -rf ~/Library/Developer/Xcode/DerivedData
+
       - name: Clean and Fetch Dependencies
         run: |
           flutter clean
@@ -40,6 +44,9 @@ jobs:
             echo "🚨 exportOptions.plist is missing!"
             exit 1
           fi
+
+      - name: Verify exportOptions.plist Contents
+        run: cat ios/exportOptions.plist
 
       - name: Install CocoaPods
         run: pod install --repo-update
