@@ -9,9 +9,6 @@ workflows:
       cocoapods: default
       vars:
         BUNDLE_ID: "com.example.smartbin"
-        CERTIFICATE_PATH: $CM_CERTIFICATE_PATH
-        CERTIFICATE_PASSWORD: $CM_CERTIFICATE_PASSWORD
-        PROVISIONING_PROFILE_PATH: $CM_PROVISIONING_PROFILE_PATH
 
     scripts:
       - name: Install Flutter dependencies
