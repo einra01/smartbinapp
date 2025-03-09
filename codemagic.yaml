@@ -6,9 +6,6 @@ workflows:
     integrations:
       app_store_connect: codemagic
     environment:
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: com.example.smartbin
       vars:
         XCODE_PROJECT: 'SmartBin.xcodeproj'
         XCODE_SCHEME: 'SmartBin'
