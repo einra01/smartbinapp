@@ -4,23 +4,26 @@ workflows:
     max_build_duration: 120
     instance_type: mac_mini_m2
 
-
     scripts:
-          - name: Set up code signing settings on Xcode project
-            script: |
-              xcode-project use-profiles
-          - name: Get Flutter packages
-            script: |
-              flutter pub get
-          - name: Install pods
-            script: |
-              find . -name "Podfile" -execdir pod install \;
+      - name: Set up code signing settings on Xcode project
+        script: |
+          xcode-project use-profiles
+      - name: Get Flutter packages
+        script: |
+          flutter pub get
+      - name: Install pods
+        script: |
+          find . -name "Podfile" -execdir pod install \;
+      - name: Build iOS app
+        script: |
+          flutter build ios --release --no-codesign
 
     artifacts:
-          - build/ios/ipa/*.ipa
-          - /tmp/xcodebuild_logs/*.log
-          - flutter_drive.log
-publishing:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
+
+    publishing:
       email:
         recipients:
           - ramos.marklawrence.03042002@gmail.com
