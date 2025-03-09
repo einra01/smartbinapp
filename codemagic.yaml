@@ -28,11 +28,9 @@ workflows:
             --workspace "$CM_BUILD_DIR/ios/$XCODE_WORKSPACE" \
             --scheme "$XCODE_SCHEME" \
             --no-codesign
+          flutter build ipa --release --export-options-plist=ios/exportOptions.plist
       
 
-      - name: Build iOS IPA
-        script: |
-          flutter build ipa --release
 
     artifacts:
       - build/**/outputs/**/*.apk       # Android APK path
