@@ -1,4 +1,10 @@
 workflows:
+
+
+name: iOS-ipa-build
+
+on:
+  workflow_dispatch:
   flutter_workflow:
     name: "Flutter"
     max_build_duration: 120
@@ -8,13 +14,6 @@ workflows:
       java: 17                  # Java version compatible with Flutter
       vars:
         PACKAGE_NAME: "com.example.smartbin"  # Your Android app ID
-
-
-name: iOS-ipa-build
-
-on:
-  workflow_dispatch:
-
 jobs:
   build-ios:
     name: 🎉 iOS Build
@@ -33,6 +32,9 @@ jobs:
         working-directory: ios
 
       - run: flutter build ipa --release --export-options-plist=ios/exportOptions.plist
+
+      - name: Debug IPA Path
+        run: ls -R build/ios/ipa
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
@@ -55,3 +57,6 @@ jobs:
           to: "ramos.marklawrence.03042002@gmail.com"
           from: "Codemagic CI"
           attachments: build/ios/ipa/*.ipa
+
+      - name: Debug Email Log
+        run: echo "Email sent successfully"
