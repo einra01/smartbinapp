@@ -13,6 +13,21 @@ workflows:
         CERTIFICATE_PASSWORD: $CM_CERTIFICATE_PASSWORD
         PROVISIONING_PROFILE_PATH: $CM_PROVISIONING_PROFILE_PATH
 
+    scripts:
+      - name: Install Flutter dependencies
+        script: |
+          flutter pub get
+
+      - name: Install CocoaPods dependencies
+        script: |
+          cd ios
+          pod install
+          cd ..
+
+      - name: Build iOS app
+        script: |
+          flutter build ios --release --no-codesign
+
     artifacts:
       - build/ios/ipa/*.ipa    # iOS .ipa file for distribution
       - build/ios/ipa/*.app    # Optional: .app file for simulator testing
