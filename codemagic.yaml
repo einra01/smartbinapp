@@ -1,3 +1,14 @@
+workflows:
+  flutter_workflow:
+    name: "Flutter Build"
+    max_build_duration: 120
+    environment:
+      flutter: stable           # Use 'stable' or specify a version like '3.16.0'
+      xcode: latest             # Latest Xcode for iOS builds
+      java: 17                  # Java version compatible with Flutter
+      vars:
+        PACKAGE_NAME: "com.example.smartbin"  # Your Android app ID
+
 name: iOS-ipa-build
 
 on:
@@ -40,7 +51,3 @@ jobs:
           tag: v1.0
           overwrite: true
           body: "This is first release"
-    publishing:
-      email:
-        recipients:
-          - "ramos.marklawrence.03042002@gmail.com"
