@@ -39,6 +39,10 @@ workflows:
       - |
         flutter build ipa --release --export-options-plist=ios/exportOptions.plist
 
+      - |
+        echo "📤 Uploading IPA to GitHub Release..."
+        gh release create v1.0 build/ios/iphoneos/*.ipa --title "🚀 New iOS Release!" --notes "This is the latest build." --repo $CM_REPO_SLUG
+
     artifacts:
       - build/ios/iphoneos/*.ipa
 
@@ -49,10 +53,3 @@ workflows:
         notify:
           success: true
           failure: false
-
-      github:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        tag: v1.0
-        files:
-          - build/ios/iphoneos/*.ipa
-        body: "🚀 New iOS Release!"
