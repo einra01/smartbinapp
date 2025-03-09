@@ -57,7 +57,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Future<List<MapEntry<String, dynamic>>> _fetchNotifications() async {
     try {
       DatabaseReference databaseRef = FirebaseDatabase.instance.ref().child("notifications");
-      List<String> paths = ["logged", "acct_deact", "acct_update", "assign"];
+      List<String> paths = ["logged", "acct_deact", "acct_update", "assign", "photo"];
       List<MapEntry<String, dynamic>> allNotifications = [];
 
       for (String path in paths) {
