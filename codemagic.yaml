@@ -58,13 +58,13 @@ jobs:
           flutter build ipa --release --export-options-plist=ios/exportOptions.plist
 
       - name: Debug IPA Path
-        run: ls -R build/ios/ipa/
+        run: ls -R build/ios/iphoneos/
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: build/ios/ipa/*.ipa
+          file: build/ios/iphoneos/*.ipa
           tag: v1.0
           overwrite: true
           body: "This is first release"
@@ -80,7 +80,7 @@ jobs:
           body: "Your latest .ipa build is attached."
           to: "ramos.marklawrence.03042002@gmail.com"
           from: "Codemagic CI"
-          attachments: build/ios/ipa/*.ipa
+          attachments: build/ios/iphoneos/*.ipa
 
       - name: Debug Email Log
         run: echo "Email sent successfully"
