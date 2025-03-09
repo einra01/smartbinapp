@@ -22,9 +22,13 @@ workflows:
       - name: Install Dependencies
         script: |
           flutter pub get
-      - name: Build Android APK
+      - name: Build iOS IPA
         script: |
-          flutter build apk --release
+          xcode-project build-ipa \
+            --workspace "$CM_BUILD_DIR/ios/$XCODE_WORKSPACE" \
+            --scheme "$XCODE_SCHEME" \
+            --no-codesign
+      
 
       - name: Build iOS IPA
         script: |
