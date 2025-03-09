@@ -13,36 +13,6 @@ workflows:
         CERTIFICATE_PASSWORD: $CM_CERTIFICATE_PASSWORD
         PROVISIONING_PROFILE_PATH: $CM_PROVISIONING_PROFILE_PATH
 
-    scripts:
-      - echo "🔧 Setting up code signing..."
-      - |
-        keychain initialize
-        security create-keychain -p "" build.keychain
-        security default-keychain -s build.keychain
-        security unlock-keychain -p "" build.keychain
-        security import $CERTIFICATE_PATH -P $CERTIFICATE_PASSWORD -A
-        security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "" build.keychain
-        mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-        cp $PROVISIONING_PROFILE_PATH ~/Library/MobileDevice/Provisioning\ Profiles/
-
-      - flutter doctor -v
-
-      - |
-        rm -rf ~/Library/Developer/Xcode/DerivedData
-        flutter clean
-        flutter pub get
-
-      - |
-        cd ios
-        pod install --repo-update
-
-      - |
-        flutter build ipa --release --export-options-plist=ios/exportOptions.plist
-
-      - |
-        echo "📤 Uploading IPA to GitHub Release..."
-        gh release create v1.0 build/ios/iphoneos/*.ipa --title "🚀 New iOS Release!" --notes "This is the latest build." --repo $CM_REPO_SLUG
-
     artifacts:
       - build/ios/iphoneos/*.ipa
 
