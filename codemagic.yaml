@@ -1,41 +1,45 @@
-workflows:
-  flutter_workflow:
-    name: "Flutter Build"
-    max_build_duration: 120
-    environment:
-      flutter: stable           # Use 'stable' or specify a version like '3.16.0'
-      xcode: latest             # Latest Xcode for iOS builds
-      java: 17                  # Java version compatible with Flutter
-      vars:
-        PACKAGE_NAME: "com.example.smartbin"  # Your Android app ID
+name: iOS-ipa-build
 
-    triggering:
-      events:
-        - push
-        - tag
-      branch_patterns:
-        - pattern: "main"
-          include: true
-          source: true
+on:
+  workflow_dispatch:
 
-    scripts:
-      - name: Install Dependencies
-        script: |
-          flutter pub get
-      - name: Build iOS IPA
-        script: |
-          xcode-project build-ipa \
-            --workspace "$CM_BUILD_DIR/ios/$XCODE_WORKSPACE" \
-            --scheme "$XCODE_SCHEME" \
-            --no-codesign
-          flutter build ipa --release --export-options-plist=ios/exportOptions.plist
-      
+jobs:
+  build-ios:
+    name: 🎉 iOS Build
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          architecture: x64
+      - run: flutter pub get
 
 
-    artifacts:
-      - build/**/outputs/**/*.apk       # Android APK path
-      - build/ios/iphoneos/*.ipa        # iOS IPA path
+      - run: pod repo update
+        working-directory: ios
 
+      - run: flutter build ios --release --no-codesign
+
+      - run: mkdir Payload
+        working-directory: build/ios/iphoneos
+
+      - run: mv Runner.app/ Payload
+        working-directory: build/ios/iphoneos
+
+      - name: Zip output
+        run: zip -qq -r -9 FlutterIpaExport.ipa Payload
+        working-directory: build/ios/iphoneos
+
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: build/ios/iphoneos/FlutterIpaExport.ipa
+          tag: v1.0
+          overwrite: true
+          body: "This is first release"
     publishing:
       email:
         recipients:

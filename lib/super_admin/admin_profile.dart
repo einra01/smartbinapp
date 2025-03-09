@@ -498,7 +498,7 @@ class _SuperAdminAppState extends State<SuperAdminApp> {
                           icon: Icons.add_circle_outline,
                           label: 'ACCOUNT CREATION',
                           onTap: () {
-                            Navigator.pushReplacement(
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => Create(userId: '',),
