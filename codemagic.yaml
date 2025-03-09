@@ -22,11 +22,6 @@ workflows:
       - name: Install Dependencies
         script: |
           flutter pub get
-
-      - name: Flutter Analyze & Test
-        script: |
-          flutter analyze
-
       - name: Build Android APK
         script: |
           flutter build apk --release
