@@ -4,9 +4,17 @@ workflows:
     instance_type: mac_mini_m2
 
     scripts:
-      - name: Install Flutter dependencies
+      - name: Flutter clean
+        script: flutter clean
+      - name: Update iOS Deployment Target
         script: |
-          flutter pub get
+          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 10.0;/IPHONEOS_DEPLOYMENT_TARGET = 13.0;/' ios/Runner.xcodeproj/project.pbxproj
+      - name: Install Pods
+        script: |
+          cd ios
+          pod install
+      - name: Build iOS app
+        script: flutter build ios --release --no-codesign
 
       - name: Install CocoaPods dependencies
         script: |
