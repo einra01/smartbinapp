@@ -13,7 +13,7 @@ workflows:
         script: |
           cd ios
           mkdir -p Payload
-          cp -r build/ios/iphoneos/Runner.app Payload/
+          cp -r ../build/ios/iphoneos/Runner.app Payload/
           zip -r app.ipa Payload
     artifacts:
       - ios/app.ipa
@@ -21,4 +21,3 @@ workflows:
       email:
         recipients:
           - ramosmark833@gmail.com
-          - "ramosmark833@gmail.com"
