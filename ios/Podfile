@@ -1,19 +1,24 @@
-platform :ios, '12.0'  # Increase this version to at least 12.0 or the required version
+platform :ios, '12.0'  # Make sure this is appropriate for your app
 
-# Disable use of frameworks for Flutter
 use_frameworks! :linkage => :static
 
-# Flutter-specific configurations
-flutter_application_path = '../' # Adjust the path if needed
+# Fix architecture issues
+install! 'cocoapods', :disable_input_output_paths => true
 
-# Your app's CocoaPods dependencies
 target 'Runner' do
   use_frameworks! :linkage => :static
+
+  # Adding architecture settings
+  podfile = File.open('Podfile', 'a') do |f|
+    f.puts "  config.build_settings['ARCHS'] = '$(ARCHS_STANDARD)'"
+    f.puts "  config.build_settings['VALID_ARCHS'] = '$(ARCHS_STANDARD)'"
+  end
+
+  # Add the necessary pods
   pod 'Firebase/Core'
   pod 'Firebase/Auth'
   pod 'Firebase/Firestore'
-  # Add any other necessary pods here
 
-  # Flutter Pod dependencies (Manually managed)
+  # Flutter Pod dependencies
   pod 'Flutter', :path => File.join(flutter_application_path, 'packages', 'flutter', 'flutter_module.podspec')
 end
