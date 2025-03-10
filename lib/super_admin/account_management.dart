@@ -199,7 +199,15 @@ class _AccountManagementPageState extends State<AccountManagementPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('Success', style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
+            title: const Center(
+              child: Text(
+                'Success',
+                style: TextStyle(
+                    color: Colors.green,
+                    fontWeight: FontWeight.bold
+                ),
+              ),
+            ),
             content: Text(message),
             actions: [
               TextButton(

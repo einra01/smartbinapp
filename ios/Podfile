@@ -20,5 +20,4 @@ target 'Runner' do
   pod 'Firebase/Firestore'
 
   # Flutter Pod dependencies
-  pod 'Flutter', :path => File.join(flutter_application_path, 'packages', 'flutter', 'flutter_module.podspec')
 end
