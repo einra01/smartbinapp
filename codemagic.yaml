@@ -1,14 +1,7 @@
- workflows:
-  ios-release:
-    name: "iOS Build"
-    max_build_duration: 120
-    environment:
-      flutter: stable
-      xcode: latest
-      java: 17
-      cocoapods: default
-      vars:
-        BUNDLE_ID: "com.example.smartbin"
+workflows:
+  default-workflow:
+    name: Default Workflow
+    instance_type: mac_mini_m2
 
     scripts:
       - name: Install Flutter dependencies
