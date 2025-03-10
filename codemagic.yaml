@@ -6,6 +6,7 @@ workflows:
       flutter: stable
       xcode: 15.0
     scripts:
+
       - name: Clean Flutter build
         script: |
           flutter clean
