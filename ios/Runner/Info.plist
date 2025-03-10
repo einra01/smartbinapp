@@ -11,7 +11,7 @@
 	<key>API_KEY</key>
 	<string>AIzaSyAqxphX3B0hxJxwUkfcosqssAYtaxqiCDk</string>
 	<key>MinimumOSVersion</key>
-    <string>12.0</string>
+    <string>13.0</string>
 
 	<key>GCM_SENDER_ID</key>
 	<string>177273556728</string>

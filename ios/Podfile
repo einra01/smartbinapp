@@ -1,4 +1,4 @@
-platform :ios, '12.0'  # Make sure this is appropriate for your app
+platform :ios, '13.0'  # Make sure this is appropriate for your app
 
 use_frameworks! :linkage => :static
 
