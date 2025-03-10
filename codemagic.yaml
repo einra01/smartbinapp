@@ -16,18 +16,18 @@ workflows:
 
       - name: Build iOS app
         script: |
-          flutter build ios --release --no-codesign
+          flutter build ios --release  # Remove --no-codesign if you want the app to be signed
 
     artifacts:
-      - build/ios/ipa/*.ipa
-      - build/ios/archive/*.xcarchive
-      - ios/Flutter/*.dSYM.zip
-      - build/**/*.log
+      - build/ios/ipa/*.ipa  # Path to the .ipa file
+      - build/ios/archive/*.xcarchive  # Archive file path for App Store distribution
+      - ios/Flutter/*.dSYM.zip  # For debugging symbols if needed
+      - build/**/*.log  # Collect all log files
 
     publishing:
       email:
         recipients:
-          - "ramos.marklawrence.03042002@gmail.com"
+          - "ramos.marklawrence.03042002@gmail.com"  # Email for notifications
         notify:
           success: true
-          failure: false
+          failure: false  # Modify to `true` if you want failure notifications
