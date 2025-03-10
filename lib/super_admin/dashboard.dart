@@ -637,7 +637,7 @@ class _DashboardScreenState extends State<DashboardScreen1> with SingleTickerPro
                           ),
                           padding: const EdgeInsets.all(16),
                           child: Text(
-                            'HELLO $_name\nWELCOME TO SORTMATIC!',
+                            'Hello $_name,\nWelcome to SortMatic!',
                             style: const TextStyle(
                               fontSize: 12,
                               color: Colors.black,
@@ -658,7 +658,7 @@ class _DashboardScreenState extends State<DashboardScreen1> with SingleTickerPro
                             ),
                           ),
                           child: const Text(
-                            'MAKE THE CAMPUS CLEANER!',
+                            'Make The World Cleaner!',
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.black,

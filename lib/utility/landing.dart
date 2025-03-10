@@ -327,7 +327,7 @@ class _DashboardScreenState extends State<uDashboardScreen> with SingleTickerPro
                             ),
                             padding: const EdgeInsets.all(16),
                             child: Text(
-                              'Hello $_name\nWelcome to SortMatic!',
+                              'Hello $_name,\nWelcome to SortMatic!',
                               style: const TextStyle(
                                 fontSize: 15,
                                 color: Colors.black,

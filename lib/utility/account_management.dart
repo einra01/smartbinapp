@@ -37,23 +37,25 @@ class _AccountManagementPage1State extends State<AccountManagementPage1> {
   final FirebaseDatabase _database = FirebaseDatabase.instance;
 
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _surnameController = TextEditingController();
+
   final TextEditingController _currentPasswordController = TextEditingController();
   final TextEditingController _newPasswordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
   String _profileImageUrl = '';
-  bool _isSaving = false;
+
   String userId = '';
   String? _expandedSection;
   bool _isCurrentPasswordObscured = true;
   bool _isNewPasswordObscured = true;
   bool _isConfirmPasswordObscured = true;
   final DatabaseReference _databaseRef = FirebaseDatabase.instance.ref("users");
+  bool _isSaving = false;
 
   bool _isLengthValid = false;
   bool _hasUpperCase = false;
   bool _hasNumber = false;
   bool _hasSymbol = false;
-
 
   bool _isLoading = false;
   bool _isValid = false;
@@ -107,13 +109,17 @@ class _AccountManagementPage1State extends State<AccountManagementPage1> {
   }
   void _validateName() {
     String newName = _nameController.text.trim();
+    String  lastname = _surnameController.text.trim();
+
     setState(() {
       _isValid = _isValidNameFormat(newName);
+      _isValid = _isValidNameFormat(lastname);
+
     });
   }
 
   bool _isValidNameFormat(String name) {
-    final RegExp regex = RegExp(r'^[A-Z][a-z]+(-[A-Z][a-z]+)?(\s[A-Z][a-z]+(-[A-Z][a-z]+)?){0,3}$');
+    final RegExp regex = RegExp(r'^[A-Z][a-z.-]+(-[A-Z][a-z.-]+)?(\s[A-Z][a-z.-]+(-[A-Z][a-z.-]+)?){0,3}$');
     return regex.hasMatch(name);
   }
 
@@ -125,6 +131,8 @@ class _AccountManagementPage1State extends State<AccountManagementPage1> {
     });
 
     String newName = _nameController.text.trim();
+    String lastname = _surnameController.text.trim();
+
     newName = _capitalizeWords(newName);
 
     User? user = _auth.currentUser;
@@ -134,12 +142,16 @@ class _AccountManagementPage1State extends State<AccountManagementPage1> {
         final currentName = userSnapshot.child('name').value as String? ?? 'Unknown';
 
         await _database.ref('users/${user.uid}').update({
-          'name': newName,
+          'name': '$newName $lastname',
+          'fname': newName,
+          'lname': lastname,
         });
 
         await _addNameChangeNotification(user.uid, currentName, newName);
 
         _nameController.clear();
+        _surnameController.clear();
+
         setState(() {
           _isValid = false;
         });
@@ -527,7 +539,31 @@ class _AccountManagementPage1State extends State<AccountManagementPage1> {
                               controller: _nameController,
                               textCapitalization: TextCapitalization.words,
                               decoration: InputDecoration(
-                                labelText: 'New Name',
+                                labelText: 'Firstname',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(30.0),
+                                  borderSide: const BorderSide(color: Colors.grey),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(30.0),
+                                  borderSide: BorderSide(color: Colors.yellow[700]!),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(30.0),
+                                  borderSide: const BorderSide(color: Colors.grey),
+                                ),
+                              ),
+                              onChanged: (value) => _validateName(), // ✅ Revalidate on text change
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.only(top: 10),
+
+                            ),
+                            TextField(
+                              controller: _surnameController,
+                              textCapitalization: TextCapitalization.words,
+                              decoration: InputDecoration(
+                                labelText: 'Surname',
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30.0),
                                   borderSide: const BorderSide(color: Colors.grey),
@@ -545,13 +581,7 @@ class _AccountManagementPage1State extends State<AccountManagementPage1> {
                             ),
                             const SizedBox(height: 5),
                             // ✅ Always show format instruction below the text field
-                            const Padding(
-                              padding: EdgeInsets.only(left: 10),
-                              child: Text(
-                                "Format: John Doe or John D.",
-                                style: TextStyle(fontSize: 14, color: Colors.grey),
-                              ),
-                            ),
+
                             const SizedBox(height: 10),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center, // ✅ Center button horizontally
