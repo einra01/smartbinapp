@@ -3,11 +3,6 @@ workflows:
     name: "iOS Build"
     instance_type: mac_mini
     max_build_duration: 60
-    environment:
-      vars:
-      cocoapods: default
-
-      BUNDLE_ID: "com.example.smartbin"
 
     scripts:
       - name: Install Flutter dependencies
