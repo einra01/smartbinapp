@@ -1,44 +1,33 @@
 workflows:
   default-workflow:
-    name: Default Workflow
+    name: IOS
     instance_type: mac_mini_m2
 
-    environment:
-      flutter: stable
-      xcode: 15.0
-
     scripts:
-      - name: Clean Flutter build
+      - name: Install Flutter dependencies
         script: |
-          flutter clean
+          flutter pub get
 
-      - name: Clean and reset Pods
+      - name: Install CocoaPods dependencies
         script: |
           cd ios
-          pod cache clean --all
-          rm -rf Pods Podfile.lock
-          pod install --repo-update
+          pod install
           cd ..
 
       - name: Build iOS app
         script: |
-          flutter build ios --release --no-codesign
-
-      - name: Create .ipa file
-        script: |
-          cd ios
-          mkdir -p Payload
-          cp -r ../build/ios/iphoneos/Runner.app Payload/
-          zip -r app.ipa Payload
+          flutter build ios --release  # Remove --no-codesign if you want the app to be signed
 
     artifacts:
-      - ios/app.ipa  # Correct path for the generated .ipa file
+      - build/ios/ipa/*.ipa  # Path to the .ipa file
+      - build/ios/archive/*.xcarchive  # Archive file path for App Store distribution
+      - ios/Flutter/*.dSYM.zip  # For debugging symbols if needed
       - build/**/*.log  # Collect all log files
 
     publishing:
       email:
         recipients:
-          - "ramos.marklawrence.03042002@gmail.com"
+          - "ramos.marklawrence.03042002@gmail.com"  # Email for notifications
         notify:
           success: true
-          failure: false
+          failure: false  # Modify to `true` if you want failure notifications
