@@ -1,33 +1,24 @@
-  workflows:
-    default-workflow:
-      name: Default Workflow
-      instance_type: mac_mini_m2
-
-      scripts:
-        - name: Install Flutter dependencies
-          script: |
-            flutter pub get
-
-        - name: Install CocoaPods dependencies
-          script: |
-            cd ios
-            pod install
-            cd ..
-
-        - name: Build iOS app
-          script: |
-            flutter build ios --release  # Remove --no-codesign if you want the app to be signed
-
-      artifacts:
-        - build/ios/ipa/*.ipa  # Path to the .ipa file
-        - build/ios/archive/*.xcarchive  # Archive file path for App Store distribution
-        - ios/Flutter/*.dSYM.zip  # For debugging symbols if needed
-        - build/**/*.log  # Collect all log files
-
-      publishing:
-        email:
-          recipients:
-            - "ramos.marklawrence.03042002@gmail.com"  # Email for notifications
-          notify:
-            success: true
-            failure: false  # Modify to `true` if you want failure notifications
+workflows:
+  ios-unsigned-build:
+    name: iOS Unsigned Build
+    instance_type: mac_mini_m2
+    environment:
+      flutter: stable
+      xcode: latest
+    scripts:
+      - name: Build iOS app
+        script: |
+          flutter build ios --release --no-codesign
+      - name: Create .ipa file
+        script: |
+          cd ios
+          mkdir -p Payload
+          cp -r build/ios/iphoneos/Runner.app Payload/
+          zip -r app.ipa Payload
+    artifacts:
+      - ios/app.ipa
+    publishing:
+      email:
+        recipients:
+          - ramosmark833@gmail.com
+          - "ramosmark833@gmail.com"
