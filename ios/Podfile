@@ -5,9 +5,6 @@ use_frameworks! :linkage => :static
 # Fix architecture issues
 install! 'cocoapods', :disable_input_output_paths => true
 
-ENV['COCOAPODS_DISABLE_STATS'] = 'true'
-platform :ios, '12.0'
-
 target 'Runner' do
   use_frameworks! :linkage => :static
 
