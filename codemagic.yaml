@@ -9,22 +9,17 @@ workflows:
       - name: Update iOS Deployment Target
         script: |
           sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 10.0;/IPHONEOS_DEPLOYMENT_TARGET = 13.0;/' ios/Runner.xcodeproj/project.pbxproj
+      - name: Install CocoaPods dependencies
+        script: |
+          cd ios
+          pod install
+          cd ..
       - name: Install Pods
         script: |
           cd ios
           pod install
       - name: Build iOS app
         script: flutter build ios --release --no-codesign
-
-      - name: Install CocoaPods dependencies
-        script: |
-          cd ios
-          pod install
-          cd ..
-
-      - name: Build iOS app
-        script: |
-          flutter build ios --release  # Remove --no-codesign if you want the app to be signed
 
     artifacts:
       - build/ios/ipa/*.ipa  # Path to the .ipa file
