@@ -5,8 +5,9 @@ workflows:
     max_build_duration: 60
 
     scripts:
-      - name: Clean project
+      - name: Clear cache
         script: |
+          rm -rf ~/.pub-cache
           flutter clean
 
       - name: Install Flutter dependencies
@@ -19,11 +20,16 @@ workflows:
           pod install
           cd ..
 
-      - name: Build iOS app (No Signing)
+      - name: Build iOS app
         script: |
-          flutter build ios --release --no-codesign
+          flutter build ios --release --no-codesign || exit 1
+
+      - name: Debug build output
+        script: |
+          ls -R build/ios/
 
     artifacts:
+      - build/ios/ipa/*.ipa
       - build/ios/archive/*.xcarchive
       - build/**/*.log
 

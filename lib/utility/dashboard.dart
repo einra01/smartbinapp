@@ -321,7 +321,7 @@ String shift = '';
                           ),
                           padding: const EdgeInsets.all(16),
                           child: Text(
-                            'HELLO $_name\nWELCOME TO SORTMATIC!',
+                            'Hello $_name,\nWelcome to SortMatic!',
                             style: const TextStyle(
                               fontSize: 12,
                               color: Colors.black,
@@ -342,7 +342,7 @@ String shift = '';
                             ),
                           ),
                           child: const Text(
-                            'MAKE THE CAMPUS CLEANER!',
+                            'Make The Campus Cleaner!',
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.black,
