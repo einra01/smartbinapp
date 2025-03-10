@@ -1,15 +1,17 @@
 workflows:
-  ios-unsigned-build:
-    name: iOS Unsigned Build
+  default-workflow:
+    name: Default Workflow
     instance_type: mac_mini_m2
+
     environment:
       flutter: stable
-      xcode: 16.2
-    scripts:
+      xcode: 15.0
 
+    scripts:
       - name: Clean Flutter build
         script: |
           flutter clean
+
       - name: Clean and reset Pods
         script: |
           cd ios
@@ -17,9 +19,11 @@ workflows:
           rm -rf Pods Podfile.lock
           pod install --repo-update
           cd ..
+
       - name: Build iOS app
         script: |
           flutter build ios --release --no-codesign
+
       - name: Create .ipa file
         script: |
           cd ios
@@ -28,8 +32,13 @@ workflows:
           zip -r app.ipa Payload
 
     artifacts:
-      - ios/app.ipa
+      - ios/app.ipa  # Correct path for the generated .ipa file
+      - build/**/*.log  # Collect all log files
+
     publishing:
       email:
         recipients:
-          - ramosmark833@gmail.com
+          - "ramos.marklawrence.03042002@gmail.com"
+        notify:
+          success: true
+          failure: false
