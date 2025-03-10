@@ -4,12 +4,17 @@ workflows:
     instance_type: mac_mini_m2
     environment:
       flutter: stable
-      xcode: latest
+      xcode: 15.0
     scripts:
-      - name: Install CocoaPods dependencies
+      - name: Clean Flutter build
+        script: |
+          flutter clean
+      - name: Clean and reset Pods
         script: |
           cd ios
-          pod install
+          pod cache clean --all
+          rm -rf Pods Podfile.lock
+          pod install --repo-update
           cd ..
       - name: Build iOS app
         script: |
