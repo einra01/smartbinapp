@@ -1,0 +1,2 @@
+C:/Users/ramos/AndroidStudioProjects/ix/SmartBin/smartbinapp/android/app/.cxx/Debug/9476l4z6/x86/CMakeFiles/edit_cache.dir
+C:/Users/ramos/AndroidStudioProjects/ix/SmartBin/smartbinapp/android/app/.cxx/Debug/9476l4z6/x86/CMakeFiles/rebuild_cache.dir
