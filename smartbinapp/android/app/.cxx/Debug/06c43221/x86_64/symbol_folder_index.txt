@@ -1,1 +1,0 @@
-C:\Users\ramos\AndroidStudioProjects\SmartBin\smartbinapp\build\app\intermediates\cxx\Debug\06c43221\obj\x86_64
