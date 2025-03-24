@@ -180,11 +180,11 @@ class _DashboardScreenState extends State<DashboardScreen1> with SingleTickerPro
               children: [
                 Icon(Icons.warning, color: Colors.redAccent), // Warning icon ⚠️
                 SizedBox(width: 10),
-                Text("No Utility Assigned", style: TextStyle(fontWeight: FontWeight.bold)),
+                Text("No Excellent Assigned", style: TextStyle(fontWeight: FontWeight.bold)),
               ],
             ),
             content: Text(
-              "There are no Utility Staff for this shift.",
+              "There are no Excellent for this shift.",
               style: TextStyle(fontSize: 16, color: Colors.black54),
             ),
             actions: [
@@ -762,7 +762,7 @@ class _DashboardScreenState extends State<DashboardScreen1> with SingleTickerPro
                                   children: [
                                     const Flexible(
                                       child: Text(
-                                        'Assigned Utility',
+                                        'Assigned Excellent',
                                         style: TextStyle(
                                           fontSize: 12,
                                           color: Colors.black,

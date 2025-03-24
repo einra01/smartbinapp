@@ -35,14 +35,14 @@ class Create extends StatefulWidget {
 class _AdminPageState extends State<Create> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _fnameController = TextEditingController();
+  final TextEditingController _lnameController = TextEditingController();
 
   bool _Create1 = false;
   String _profileImageUrl = '';
-  String _selectedRole = 'utility';
+  String _selectedRole = 'Excellent';
   String userId = '';
   String _name = '';
-
   final DatabaseReference _databaseRef = FirebaseDatabase.instance.ref('users');
   final EmailOTP _emailOtp = EmailOTP();
   String _uid = 'userId';
@@ -186,6 +186,8 @@ class _AdminPageState extends State<Create> {
     });
 
     try {
+      String fullname = "${_fnameController.text.trim()} ${_lnameController.text.trim()}";
+      String name = fullname;
       // Generate OTP
       String otp = generateOTP();
       print("Generated OTP: $otp");
@@ -214,7 +216,7 @@ class _AdminPageState extends State<Create> {
         MaterialPageRoute(
           builder: (context) => ConfirmationScreen1(
             users: null,
-            name: _nameController.text.trim(),
+            name: name,
             email: _emailController.text.trim(),
             password: password,
             role: _selectedRole,
@@ -305,9 +307,9 @@ class _AdminPageState extends State<Create> {
                 ),
                 SizedBox(height: 20),
                 TextFormField(
-                  controller: _nameController,
+                  controller: _fnameController,
                   decoration: InputDecoration(
-                    labelText: 'Name',
+                    labelText: 'First Name',
                     prefixIcon: Icon(Icons.person),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30.0),
@@ -317,7 +319,19 @@ class _AdminPageState extends State<Create> {
                 ),
 
                 SizedBox(height: 20),
+                TextFormField(
+                  controller: _fnameController,
+                  decoration: InputDecoration(
+                    labelText: 'Last Name',
+                    prefixIcon: Icon(Icons.person),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                  ),
+                  validator: (value) => value!.isEmpty ? 'Please Last name' : null,
+                ),
 
+                SizedBox(height: 20),
                 // Role selection using radio buttons
                 Row(
                   children: [
@@ -333,7 +347,7 @@ class _AdminPageState extends State<Create> {
                     ),
                     Text('Admin'),
                     Radio<String>(
-                      value: 'Utility',
+                      value: 'Excellent',
                       groupValue: _selectedRole,
                       onChanged: (value) {
                         setState(() {
@@ -341,7 +355,7 @@ class _AdminPageState extends State<Create> {
                         });
                       },
                     ),
-                    Text('Utility'),
+                    Text('Excellent'),
                   ],
                 ),
                 SizedBox(height: 20),

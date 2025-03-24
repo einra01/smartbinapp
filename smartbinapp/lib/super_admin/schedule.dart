@@ -290,7 +290,7 @@ class _ScheduleState extends State<Schedule> {
         String query = searchQuery.toLowerCase();
         return (user.name.toLowerCase().contains(query) ||
             user.deviceName.toLowerCase().contains(query)) &&
-            user.role == 'Utility' &&
+            user.role == 'Excellent' &&
             user.status == 'Active';
       }).toList();
 
@@ -365,7 +365,7 @@ class _ScheduleState extends State<Schedule> {
                           ),
                           const SizedBox(height: 10),
                           Text(user.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                          const Text("Utility Staff", style: TextStyle(fontSize: 12, color: Colors.grey)),
+                          const Text("Excellent Staff", style: TextStyle(fontSize: 12, color: Colors.grey)),
                           const SizedBox(height: 10),
 
                           DropdownButton<String>(

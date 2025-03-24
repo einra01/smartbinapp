@@ -107,7 +107,7 @@ class AppInitializerState extends State<AppInitializer> {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const DashboardScreen()),
       );
-    } else if (role == 'Utility') {
+    } else if (role == 'Excellent') {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const uDashboardScreen()),
       );
@@ -226,7 +226,7 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => const DashboardScreen()),
           );
-        } else if (role == 'Utility') {
+        } else if (role == 'Excellent') {
           _showSnackbar('Welcome, $userName!');
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => const uDashboardScreen()),
